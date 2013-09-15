@@ -1,4 +1,8 @@
-<form action="register.php" method="post" class="form-horizontal">
+<?php
+print_errors();
+?>
+<form action="#" method="post" class="form-horizontal">
+    <input name="action" type="hidden" value="register" />
     <div class="form-group">
         <label class="col-lg-2 control-label" for="username">Username</label>
         <div class="col-lg-10">

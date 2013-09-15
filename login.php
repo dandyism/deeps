@@ -1,5 +1,8 @@
-<form action="deeps.php" method="post" class="form-horizontal">
-    <input name="action" type="hidden" value="register" />
+<?php
+print_errors();
+?>
+<form action="#" method="post" class="form-horizontal">
+    <input name="action" type="hidden" value="login" />
     <div class="form-group">
         <label for="username" class="col-lg-2 control-label">Username</label>
         <div class="col-lg-10">
