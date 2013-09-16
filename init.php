@@ -75,17 +75,6 @@ function username_check($username) {
 }
 
 if (is_request("action", "register")) {
-    global $pass_check;
-    // Registration Validation
-    $validator = new fValidation();
-    $validator->addRequiredFields('username', 'password', 'password_check', 'email');
-    $validator->addEmailFields('email');
-    // TODO: Less derpy solution
-    $pass_check = $_REQUEST["password_check"];
-
-    $validator->addCallbackRule('password', 'password_check', 'The passwords do not match.');
-    $validator->addCallbackRule('username', 'username_check', 'That username is taken.');
-    if (validate($validator))
         register($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
 }
 
@@ -125,11 +114,28 @@ function print_errors() {
 }
 
 function register($username, $password, $email) {
-    global $db;
-    $hash = fCryptography::hashPassword($password);
-    $db->execute("INSERT INTO users (username,password_hash,email) VALUES(%s,%s,%s)", $username, $hash, $email);
-    login($username, $password); 
-    // TODO: error checking
+   global $db, $pass_check;
+
+    // Registration Validation
+    $validator = new fValidation();
+    $validator->addRequiredFields('username', 'password', 'password_check', 'email');
+    $validator->addEmailFields('email');
+    // TODO: Less derpy solution
+    $pass_check = $_REQUEST["password_check"];
+
+    $validator->addCallbackRule('password', 'password_check', 'The passwords do not match.');
+    $validator->addCallbackRule('username', 'username_check', 'That username is taken.');
+
+    if (validate($validator)) {
+        $hash = fCryptography::hashPassword($password);
+        $db->execute("INSERT INTO users (username,password_hash,email) VALUES(%s,%s,%s)", $username, $hash, $email);
+        login($username, $password); 
+    }
+    else {
+        return false;
+    }
+
+    return true;
 }
 
 function login($username, $password) {
