@@ -1,7 +1,7 @@
 <?php
 print_errors();
 ?>
-<form action="#" method="post" class="form-horizontal">
+<form action="index.php" method="post" class="form-horizontal">
     <input name="action" type="hidden" value="register" />
     <div class="form-group">
         <label class="col-lg-2 control-label" for="username">Username</label>

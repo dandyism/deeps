@@ -1,7 +1,5 @@
 <?php
 $INIT = true;
-require_once("deeps.php");
-
 function autoloader($class_name) {
     $flourish_root = "./flourish/";
     $file = $flourish_root . $class_name . '.php';
@@ -27,6 +25,14 @@ $template->set(array(
 // Database
 $db = new fDatabase('mysql', 'deeps', 'deeps', 'deeps');
 
+// Authorization
+fAuthorization::setLoginPage('?page=login');
+fAuthorization::setAuthLevels(
+    array(
+        'player' => 50
+    )
+);
+
 function is_request($name, $value) {
     if (isset($_REQUEST[$name]) && $_REQUEST[$name] == $value) {
         return true;
@@ -41,11 +47,15 @@ if (is_request("page", "login")) {
 else if (is_request("page", "register")) {
     $template->set('main', 'register.php');
 }
+else if (fAuthorization::checkLoggedIn()) {
+    $template->set('main', 'game.php');
+}
 else {
     $template->set('main', 'default.php');
 }
 
 function password_check($value) {
+    global $pass_check;
     if (isset($pass_check) && $value == $pass_check) {
         return true;
     }
@@ -54,9 +64,10 @@ function password_check($value) {
 }
 
 function username_check($username) {
-    $result = $db->query("SELECT COUNT(username) FROM users WHERE username='$username'");
-    $row = $result->fetch_assoc();
-    if ($row['COUNT(*)'] > 0) {
+    global $db;
+    $result = $db->query("SELECT COUNT(username) FROM users WHERE username='%s'",$username);
+    $row = $result->fetchRow();
+    if ($row['COUNT(username)'] > 0) {
         return false;
     }
 
@@ -64,6 +75,7 @@ function username_check($username) {
 }
 
 if (is_request("action", "register")) {
+    global $pass_check;
     // Registration Validation
     $validator = new fValidation();
     $validator->addRequiredFields('username', 'password', 'password_check', 'email');
@@ -74,7 +86,7 @@ if (is_request("action", "register")) {
     $validator->addCallbackRule('password', 'password_check', 'The passwords do not match.');
     $validator->addCallbackRule('username', 'username_check', 'That username is taken.');
     if (validate($validator))
-        register($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['password_check'], $_REQUEST['email']);
+        register($_REQUEST['username'], $_REQUEST['password'], $_REQUEST['email']);
 }
 
 if (is_request("action", "login")) {
@@ -112,10 +124,28 @@ function print_errors() {
     }
 }
 
-function register($username, $password, $password_check, $email) {
-
+function register($username, $password, $email) {
+    global $db;
+    $hash = fCryptography::hashPassword($password);
+    $db->execute("INSERT INTO users (username,password_hash,email) VALUES(%s,%s,%s)", $username, $hash, $email);
+    login($username, $password); 
+    // TODO: error checking
 }
 
 function login($username, $password) {
+    global $db;
+    $result = $db->query("SELECT id, password_hash FROM users WHERE username=%s", $username);
+    if($row = $result->fetchRow()) {
+        if (!fCryptography::checkPasswordHash($password, $row['password_hash'])) {
+            fMessaging::create('error', "The password was invalid.");
+            return false;
+        }
 
+        fAuthorization::setUserAuthLevel('player');
+        fSession::set('player_id', $row['id']);
+    }
+    else {
+        fMessaging::create('error', "That user does not exist.");
+        return false;
+    }
 }
