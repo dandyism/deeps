@@ -1,6 +1,6 @@
 <?php
 function autoloader($class_name) {
-    $flourish_root = "./flourish/";
+    $flourish_root = "/opt/lampp/htdocs/flourish/";
     $file = $flourish_root . $class_name . '.php';
     if (file_exists($file)) {
         require_once $file;
