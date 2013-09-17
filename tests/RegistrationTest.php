@@ -1,6 +1,20 @@
 <?php
 require_once('../init.php');
-class RegistrationTest extends PHPUnit_Framework_TestCase {
+class RegistrationTest extends PHPUnit_Extensions_Database_TestCase {
+
+    public function getConnection() {
+        $database = 'deeps';
+        $user = 'deeps';
+        $password = 'deeps';
+        $pdo = new PDO('mysql:host=localhost;dbname=deeps',$user, $password);
+        return $this->createDefaultDBConnection($pdo, $database);
+    }
+
+    public function getDataSet() {
+        $dataSet = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
+        $dataSet->addTable('users',dirname(__FILE__)."/users.csv");
+        return $dataSet;
+    }
 
     public function invalidRegistrations() {
         return array(
@@ -28,6 +42,7 @@ class RegistrationTest extends PHPUnit_Framework_TestCase {
         fRequest::set('email', $email);
         $result = Registration::register();
         $this->assertFalse($result, "Invalid registration information was accepted.");
+        $this->assertEquals(1, $this->getConnection()->getRowCount('users'), "Invalid user data was inserted into the database.");
     }
 
     /**
@@ -42,5 +57,6 @@ class RegistrationTest extends PHPUnit_Framework_TestCase {
         fRequest::set('email', $email);
         $result = Registration::register();
         $this->assertTrue($result, "Valid registration information was not accepted.");
+        $this->assertEquals(2, $this->getConnection()->getRowCount('users'), "Valid user data was not inserted into the database.");
     }
 }
