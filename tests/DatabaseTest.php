@@ -16,21 +16,41 @@ class DatabaseTest extends PHPUnit_Extensions_Database_TestCase {
         return $dataSet;
     }
 
+    public function rowsToInsert() {
+        return array(
+            array("users", array('username' => 'bill', 'email' => 'foo@mailinator.com'))
+        );
+    }
+
+    public function rowsToDelete() {
+        return array(
+            array("users", array('username' => 'steve', 'email' => 'foo@mailinator.com'))
+        );
+    }
+
     /**
      * @test
+     * @dataProvider rowsToInsert
      */
-    public function databaseInsertion() {
-        Database::insert("users", array('username' => 'bill', 'email' => 'foo@mailinator.com'));
-        $this->assertEquals(2, $this->getConnection()->getRowCount('users'), "The record was not inserted into the database.");
+    public function databaseInsertion($table, array $row) {
+        Database::insert($table, $row);
+        $this->assertEquals(2, $this->getConnection()->getRowCount($table), "The record was not inserted into the database.");
+    }
+
+    /**
+     * @test
+     * @dataProvider rowsToDelete
+     */
+    public function databaseDeletion($table, array $row) {
+        Database::insert($table, $row);
+        $this->assertEquals(2, $this->getConnection()->getRowCount($table), "Pre-condition not met.");
+        Database::delete($table, array_slice($row,0,1));
+        $this->assertEquals(1, $this->getConnection()->getRowCount($table), "The record was not deleted from the database.");
     }
 
     /**
      * @test
      */
-    public function databaseDeletion() {
-        Database::insert("users", array('username' => 'steve', 'email' => 'foo@mailinator.com'));
-        $this->assertEquals(2, $this->getConnection()->getRowCount('users'), "Pre-condition not met.");
-        Database::delete("users", array('username' => 'steve'));
-        $this->assertEquals(1, $this->getConnection()->getRowCount('users'), "The record was not deleted from the database.");
+    public function databaseQuery() {
     }
 }
