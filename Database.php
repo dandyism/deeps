@@ -7,6 +7,10 @@ class Database {
     }
 
     public function insert($table, array $fields) {
+        if (!isset($this->db)) {
+            Database::initialize();
+        }
+
         $columns    = "";
         $values     = "";
         foreach ($fields as $key => $value) {
@@ -21,6 +25,10 @@ class Database {
     }
 
     public function delete($table, array $criterion) {
+        if (!isset($this->db)) {
+            Database::initialize();
+        }
+
         $query = "";
         foreach ($criterion as $key => $value) {
             $value = $this->db->escape('string',$value);
