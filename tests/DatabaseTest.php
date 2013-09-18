@@ -33,8 +33,9 @@ class DatabaseTest extends PHPUnit_Extensions_Database_TestCase {
      * @dataProvider rowsToInsert
      */
     public function databaseInsertion($table, array $row) {
+        $current_count = $this->getConnection()->getRowCount($table);
         Database::insert($table, $row);
-        $this->assertEquals(2, $this->getConnection()->getRowCount($table), "The record was not inserted into the database.");
+        $this->assertEquals($current_count+1, $this->getConnection()->getRowCount($table), "The record was not inserted into the database.");
     }
 
     /**
@@ -43,13 +44,14 @@ class DatabaseTest extends PHPUnit_Extensions_Database_TestCase {
      */
     public function databaseDeletion($table, array $row) {
         Database::insert($table, $row);
-        $this->assertEquals(2, $this->getConnection()->getRowCount($table), "Pre-condition not met.");
+        $current_count = $this->getConnection()->getRowCount($table);
         Database::delete($table, array_slice($row,0,1));
-        $this->assertEquals(1, $this->getConnection()->getRowCount($table), "The record was not deleted from the database.");
+        $this->assertEquals($current_count-1, $this->getConnection()->getRowCount($table), "The record was not deleted from the database.");
     }
 
     /**
      * @test
+     * @dataProvider rowsToInsert
      */
     public function databaseQuery() {
     }
