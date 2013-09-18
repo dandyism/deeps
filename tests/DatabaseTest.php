@@ -22,6 +22,17 @@ class DatabaseTest extends PHPUnit_Extensions_Database_TestCase {
     public function databaseInsertion() {
         Database::initialize();
         Database::insert("users", array('username' => 'bill', 'email' => 'foo@mailinator.com'));
-        $this->assertEquals(2, $this->getConnection()->getRowCount('users'),"The record was not inserted into the database.");
+        $this->assertEquals(2, $this->getConnection()->getRowCount('users'), "The record was not inserted into the database.");
+    }
+
+    /**
+     * @test
+     */
+    public function databaseDeletion() {
+        Database::initialize();
+        Database::insert("users", array('username' => 'steve', 'email' => 'foo@mailinator.com'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('users'), "Pre-condition not met.");
+        Database::delete("users", array('username' => 'steve'));
+        $this->assertEquals(1, $this->getConnection()->getRowCount('users'), "The record was not deleted from the database.");
     }
 }

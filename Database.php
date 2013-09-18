@@ -19,4 +19,15 @@ class Database {
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
         $this->db->execute($query);
     }
+
+    public function delete($table, array $criterion) {
+        $query = "";
+        foreach ($criterion as $key => $value) {
+            $value = $this->db->escape('string',$value);
+            $query .= "AND $key = $value ";
+        }
+        $query = substr($query, 4);
+        $query = "DELETE FROM $table WHERE $query";
+        $this->db->execute($query);
+    }
 }
