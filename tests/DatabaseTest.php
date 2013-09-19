@@ -51,8 +51,10 @@ class DatabaseTest extends PHPUnit_Extensions_Database_TestCase {
 
     /**
      * @test
-     * @dataProvider rowsToInsert
      */
-    public function databaseQuery() {
+    public function databaseRetrieve() {
+        Database::insert("users", array('username' => 'susan', 'email' => 'boon@mailinator.com'));
+        $result = Database::retrieve("users", array('username' => 'susan'));
+        $this->assertEquals('susan', $result['username'], "The wrong record was returned.");
     }
 }

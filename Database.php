@@ -38,4 +38,18 @@ class Database {
         $query = "DELETE FROM $table WHERE $query";
         $this->db->execute($query);
     }
+
+    public function retrieve($table, array $criterion) {
+        if (!isset($this->db)) {
+            Database::initialize();
+        }
+
+        $query = "SELECT * FROM $table WHERE";
+        foreach ($criterion as $key => $value) {
+            $value = $this->db->escape('string', $value);
+            $query .= " $key = $value";
+        }
+
+        return $this->db->query($query)->fetchRow();
+    }
 }
