@@ -3,6 +3,6 @@
     <nav role="navigation" class="navbar navbar-default">
         <ul class="nav navbar-nav">
             <li><a href="index.php?page=login" >login</a></li> 
-            <li><a href="index.php?page=register" >register</a></li>
+            <li><a href="index.php?page=registration" >register</a></li>
         </ul>
     </nav>

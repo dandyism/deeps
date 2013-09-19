@@ -40,9 +40,10 @@ class RegistrationTest extends PHPUnit_Extensions_Database_TestCase {
         fRequest::set('password', $password);
         fRequest::set('password_check', $password_check);
         fRequest::set('email', $email);
+        $current_count = $this->getConnection()->getRowCount('users');
         $result = Registration::register();
         $this->assertFalse($result, "Invalid registration information was accepted.");
-        $this->assertEquals(1, $this->getConnection()->getRowCount('users'), "Invalid user data was inserted into the database.");
+        $this->assertEquals($current_count, $this->getConnection()->getRowCount('users'), "Invalid user data was inserted into the database.");
     }
 
     /**
@@ -55,8 +56,9 @@ class RegistrationTest extends PHPUnit_Extensions_Database_TestCase {
         fRequest::set('password', $password);
         fRequest::set('password_check', $password_check);
         fRequest::set('email', $email);
+        $current_count = $this->getConnection()->getRowCount('users');
         $result = Registration::register();
         $this->assertTrue($result, "Valid registration information was not accepted.");
-        $this->assertEquals(2, $this->getConnection()->getRowCount('users'), "Valid user data was not inserted into the database.");
+        $this->assertEquals($current_count+1, $this->getConnection()->getRowCount('users'), "Valid user data was not inserted into the database.");
     }
 }

@@ -3,6 +3,7 @@ print_errors();
 ?>
 <form action="index.php" method="post" class="form-horizontal">
     <input name="action" type="hidden" value="register" />
+    <input name="page" type="hidden" value="registration" />
     <div class="form-group">
         <label class="col-lg-2 control-label" for="username">Username</label>
         <div class="col-lg-10">

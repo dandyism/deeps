@@ -22,6 +22,14 @@ class Registration {
             return false;
         }
 
+        Database::insert('users', array(
+            'username'          => fRequest::get('username', 'string'),
+            'password'          => fRequest::get('password', 'string'),
+            'password_check'    => fRequest::get('password_check', 'string'),
+            'email'             => fRequest::get('email', 'string')
+        ));
+
+        fAuthorization::setUserToken('player');
         return true;
     }
 }

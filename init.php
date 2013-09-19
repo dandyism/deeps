@@ -17,3 +17,26 @@ function autoloader($class_name) {
 }
 
 spl_autoload_register('autoloader');
+
+fAuthorization::setLoginPage('/?page=login');
+fAuthorization::setAuthLevels(
+    array(
+        'player' => 50
+    )
+);
+
+$template = new fTemplating();
+$template->set('header', "header.php");
+$template->set('footer', "footer.php");
+$template->set('main', "default.php");
+
+if (fAuthorization::checkAuthLevel('player')) {
+    $template->set('main', "game.php");
+}
+else if (fRequest::get('page', 'string') == "registration") {
+    $template->set('main', "register.php");
+
+    if (fRequest::get('action', 'string') == "register") {
+        Registration::register();
+    }
+}
