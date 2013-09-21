@@ -22,14 +22,15 @@ class Registration {
             return false;
         }
 
+        $password_hash = fCryptography::hashPassword(fRequest::get('password', 'string'));
         Database::insert('users', array(
             'username'          => fRequest::get('username', 'string'),
-            'password'          => fRequest::get('password', 'string'),
-            'password_check'    => fRequest::get('password_check', 'string'),
+            'password_hash'     => $password_hash,
             'email'             => fRequest::get('email', 'string')
         ));
 
-        fAuthorization::setUserToken('player');
+        fAuthorization::setUserAuthLevel('player');
+        fAuthorization::setUserToken(fRequest::get('email', 'string'));
         return true;
     }
 }
