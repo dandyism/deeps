@@ -25,18 +25,20 @@ fAuthorization::setAuthLevels(
     )
 );
 
-$template = new fTemplating();
+$template = new fTemplating('/opt/lampp/htdocs/');
 $template->set('header', "header.php");
 $template->set('footer', "footer.php");
 $template->set('main', "default.php");
 
+// Actions
+if (fRequest::get('action', 'string') == "register") {
+    Registration::register();
+}
+
+// Page loads
 if (fAuthorization::checkAuthLevel('player')) {
     $template->set('main', "game.php");
 }
 else if (fRequest::get('page', 'string') == "registration") {
     $template->set('main', "register.php");
-
-    if (fRequest::get('action', 'string') == "register") {
-        Registration::register();
-    }
 }
