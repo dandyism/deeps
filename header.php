@@ -2,8 +2,18 @@
     <h1><?php echo $this->get('game_name'); ?></h1>
     <nav role="navigation" class="navbar navbar-default">
         <ul class="nav navbar-nav">
-            <li><a href="index.php?page=login" >login</a></li> 
-            <li><a href="index.php?page=registration" >register</a></li>
+<?php
+if (fAuthorization::checkAuthLevel('player')) {
+?>
+                <li><a href="index.php?action=logout">Logout</a></li>
+<?php
+} else {
+?>
+                <li><a href="index.php?page=login" >login</a></li> 
+                <li><a href="index.php?page=registration" >register</a></li>
+<?php
+}
+?>
         </ul>
     </nav>
 

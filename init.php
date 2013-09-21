@@ -32,7 +32,13 @@ $template->set('main', "default.php");
 
 // Actions
 if (fRequest::get('action', 'string') == "register") {
-    Registration::register();
+    Users::register();
+}
+else if (fRequest::get('action', 'string') == "login") {
+    Users::login();
+}
+else if (fRequest::get('action', 'string') == "logout") {
+    fAuthorization::destroyUserInfo();
 }
 
 // Page loads
@@ -41,4 +47,7 @@ if (fAuthorization::checkAuthLevel('player')) {
 }
 else if (fRequest::get('page', 'string') == "registration") {
     $template->set('main', "register.php");
+}
+else if (fRequest::get('page', 'string') == "login") {
+    $template->set('main', "login.php");
 }
