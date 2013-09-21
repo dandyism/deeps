@@ -6,3 +6,12 @@
             <li><a href="index.php?page=registration" >register</a></li>
         </ul>
     </nav>
+
+<?php
+if (fMessaging::check('error', 'user')) {
+    fMessaging::show('error', 'user', 'alert alert-danger');
+}
+else {
+    fMessaging::show('success', 'user', 'alert alert-success');
+}
+?>

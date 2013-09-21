@@ -19,6 +19,7 @@ class Registration {
                 );
             }
         } catch (fValidationException $e) {
+            fMessaging::create('error', 'user', $e->getMessage());
             return false;
         }
 
@@ -31,6 +32,8 @@ class Registration {
 
         fAuthorization::setUserAuthLevel('player');
         fAuthorization::setUserToken(fRequest::get('email', 'string'));
+
+        fMessaging::create('success', 'user', "You have successfully registered.");
         return true;
     }
 }
