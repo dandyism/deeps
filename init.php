@@ -26,6 +26,7 @@ fAuthorization::setAuthLevels(
 );
 
 $template = new fTemplating('/opt/lampp/htdocs/');
+$template->set('game_name', "Deeps");
 $template->set('header', "header.php");
 $template->set('footer', "footer.php");
 $template->set('main', "default.php");
