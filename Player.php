@@ -40,4 +40,13 @@ class Player {
 
         return false;
     }
+
+    public function save() {
+        Database::update('users', array('email' => fAuthorization::getUserToken()),
+            array(
+                'score' => $this->score,
+                'strength' => $this->strength
+            )
+        );
+    }
 }

@@ -7,3 +7,7 @@ $player = new Player();
     <div class="col-md-4">score: <?php echo $player->score; ?></div>
     <div class="col-md-4">depth: 0</div>
 </div>
+
+<?php
+$player->save();
+?>

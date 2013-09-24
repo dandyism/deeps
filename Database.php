@@ -5,7 +5,7 @@ class Database {
     protected function build_sql_from_array(array $array, $delim = ',') {
         $sql = "";
         foreach ($array as $key => $value) {
-            $value = self::$db->escape('string', $value);
+            $value = self::$db->escape(gettype($value), $value);
             $sql .= "$delim $key = $value";
         }
 
@@ -62,7 +62,7 @@ class Database {
 
         $updates = self::build_sql_from_array($fields);
         $selectors = self::build_sql_from_array($criterion, 'AND');
-        $query = "UPDATE TABLE $table SET $updates WHERE $selectors";
+        $query = "UPDATE $table SET $updates WHERE $selectors";
         self::$db->execute($query);
     }
 }
