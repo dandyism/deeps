@@ -39,7 +39,7 @@ class Database {
         self::$db->execute($query);
     }
 
-    public function retrieve($table, array $criterion, $row = null) {
+    public function retrieve($table, array $criterion, $field = null) {
         if (self::$db === null) {
             Database::initialize();
         }

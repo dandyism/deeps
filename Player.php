@@ -3,6 +3,15 @@ class Player {
     protected $name;
     protected $score;
     protected $strength;
+    protected $email;
+
+    public function __construct() {
+        $row = Database::retrieve('users', array('email' => fAuthorization::getUserToken()));
+        $this->name = $row['username'];
+        $this->score = $row['score'];
+        $this->strength = $row['strength'];
+        $this->email = $row['email'];
+    }
 
     public function __get($property) {
         if (property_exists($this, $property)) {
