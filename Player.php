@@ -4,12 +4,18 @@ class Player {
     protected $score;
     protected $strength;
 
-    public function name($name = null) {
-        if ($name == null) {
-            return $this->name;
+    public function __get($property) {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+    }
+
+    public function __set($property, $value) {
+        if (property_exists($this, $property)) {
+            $this->$property = $value;
         }
 
-        $this->name = $name;
+        return $this;
     }
 
     public function increase_score_by($points) {
