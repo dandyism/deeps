@@ -39,7 +39,7 @@ class Database {
         self::$db->execute($query);
     }
 
-    public function retrieve($table, array $criterion) {
+    public function retrieve($table, array $criterion, $row = null) {
         if (self::$db === null) {
             Database::initialize();
         }
@@ -50,6 +50,12 @@ class Database {
             $query .= " $key = $value";
         }
 
-        return self::$db->query($query)->fetchRow();
+        $row = self::$db->query($query)->fetchRow();
+
+        if ($field != null) {
+            return $row[$field];
+        }
+
+        return $row;
     }
 }
