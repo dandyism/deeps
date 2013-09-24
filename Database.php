@@ -2,6 +2,17 @@
 class Database {
     protected static $db;
 
+    protected function build_sql_from_array(array $array, $delim = ',') {
+        $sql = "";
+        foreach ($array as $key => $value) {
+            $value = self::$db->escape('string', $value);
+            $sql .= "$delim $key = $value";
+        }
+
+        $sql = substr($sql, strlen($delim)+1);
+        return $sql;
+    }
+
     public function initialize() {
         self::$db = new fDatabase('mysql','deeps','deeps','deeps');
     }
@@ -11,15 +22,8 @@ class Database {
             Database::initialize();
         }
 
-        $columns    = "";
-        $values     = "";
-        foreach ($fields as $key => $value) {
-            $value = self::$db->escape('string',$value);
-            $columns    .= ", $key";
-            $values     .= ", $value";
-        }
-        $columns    = substr($columns,  2);
-        $values     = substr($values,   2);
+        $columns    = self::build_sql_from_array(array_keys($fields));
+        $values     = self::build_sql_from_array(array_values($fields));
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
         self::$db->execute($query);
     }
@@ -29,13 +33,8 @@ class Database {
             Database::initialize();
         }
 
-        $query = "";
-        foreach ($criterion as $key => $value) {
-            $value = self::$db->escape('string',$value);
-            $query .= "AND $key = $value ";
-        }
-        $query = substr($query, 4);
-        $query = "DELETE FROM $table WHERE $query";
+        $selectors = self::build_sql_from_array($criterion, 'AND');
+        $query = "DELETE FROM $table WHERE $selectors";
         self::$db->execute($query);
     }
 
@@ -44,11 +43,8 @@ class Database {
             Database::initialize();
         }
 
-        $query = "SELECT * FROM $table WHERE";
-        foreach ($criterion as $key => $value) {
-            $value = self::$db->escape('string', $value);
-            $query .= " $key = $value";
-        }
+        $selectors = self::build_sql_from_array($criterion, 'AND');
+        $query = "SELECT * FROM $table WHERE $selectors";
 
         $row = self::$db->query($query)->fetchRow();
 
@@ -57,5 +53,16 @@ class Database {
         }
 
         return $row;
+    }
+
+    public function update($table, array $criterion, array $fields) {
+        if (self::$db === null) {
+            Database::initialize();
+        }
+
+        $updates = self::build_sql_from_array($fields);
+        $selectors = self::build_sql_from_array($criterion, 'AND');
+        $query = "UPDATE TABLE $table SET $updates WHERE $selectors";
+        self::$db->execute($query);
     }
 }
