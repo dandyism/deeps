@@ -46,7 +46,7 @@ else if (fRequest::get('action', 'string') == "logout") {
 if (fAuthorization::checkAuthLevel('player')) {
     $template->set('main', "game.php");
 }
-else if (fRequest::get('page', 'string') == "registration") {
+else if (fRequest::get('page', 'string') == "register") {
     $template->set('main', "register.php");
 }
 else if (fRequest::get('page', 'string') == "login") {

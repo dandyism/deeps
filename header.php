@@ -5,12 +5,12 @@
 <?php
 if (fAuthorization::checkAuthLevel('player')) {
 ?>
-                <li><a href="index.php?action=logout">Logout</a></li>
+                <li><a href="/?action=logout">Logout</a></li>
 <?php
 } else {
 ?>
-                <li><a href="index.php?page=login" >login</a></li> 
-                <li><a href="index.php?page=registration" >register</a></li>
+                <li><a href="/login/" >login</a></li> 
+                <li><a href="/register/" >register</a></li>
 <?php
 }
 ?>

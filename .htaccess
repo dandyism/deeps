@@ -1,1 +1,4 @@
 ErrorDocument 404 /404.html
+
+RewriteEngine on
+RewriteRule ^([^/.]+)/?$ index.php?page=$1 [L]
