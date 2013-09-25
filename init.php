@@ -7,7 +7,7 @@ function autoloader($class_name) {
         return;
     }
 
-    $file = '/opt/lampp/htdocs/' . $class_name . '.php';
+    $file = '/opt/lampp/htdocs/classes/' . $class_name . '.php';
     if (file_exists($file)) {
         require_once $file;
         return;
