@@ -1,7 +1,7 @@
 <?php
 class Users {
     public function login() {
-        $row = Database::retrieve('users', array('username' => fRequest::get('username', 'string')));
+        $row = Database::retrieve_row('users', array('username' => fRequest::get('username', 'string')));
 
         if (fCryptography::checkPasswordHash(fRequest::get('password', 'string'), $row['password_hash'])) {
             fAuthorization::setUserAuthLevel('player');

@@ -1,4 +1,4 @@
-<form action="index.php" method="post" class="form-horizontal">
+<form action="/" method="post" class="form-horizontal">
     <input name="action" type="hidden" value="register" />
     <input name="page" type="hidden" value="registration" />
     <div class="form-group">

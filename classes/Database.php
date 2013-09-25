@@ -38,7 +38,7 @@ class Database {
         self::$db->execute($query);
     }
 
-    public function retrieve($table, array $criterion, $field = null) {
+    public function retrieve_row($table, array $criterion, $field = null) {
         if (self::$db === null) {
             Database::initialize();
         }
@@ -53,6 +53,21 @@ class Database {
         }
 
         return $row;
+    }
+
+    public function retrieve($table, array $criteria) {
+        if (self::$db === null) {
+            Database::initialize();
+        }
+
+        $selectors = "";
+        foreach ($criteria as $criterion) {
+            $selectors .= " AND $criterion";
+        }
+
+        $selectors = substr($selectors, 5);
+        $query = "SELECT * FROM $table WHERE $selectors";
+        return self::$db->query($query)->fetchAllRows();
     }
 
     public function update($table, array $criterion, array $fields) {
