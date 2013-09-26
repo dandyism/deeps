@@ -2,7 +2,6 @@
 class Player {
     protected $name;
     protected $score;
-    protected $strength;
     protected $email;
     protected $depth;
 
@@ -10,7 +9,6 @@ class Player {
         $row = Database::retrieve_row('users', array('email' => fAuthorization::getUserToken()));
         $this->name = $row['username'];
         $this->score = $row['score'];
-        $this->strength = $row['strength'];
         $this->email = $row['email'];
         $this->depth = $row['depth'];
     }
