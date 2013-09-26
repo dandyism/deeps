@@ -44,12 +44,17 @@ else if ($action == "logout") {
 }
 
 // Page loads
+$page = fRequest::get('page', 'string');
 if (fAuthorization::checkAuthLevel('player')) {
     $template->set('main', "game.php");
 }
-else if (fRequest::get('page', 'string') == "register") {
+else if ($page == "register") {
     $template->set('main', "register.php");
 }
-else if (fRequest::get('page', 'string') == "login") {
+else if ($page == "login") {
     $template->set('main', "login.php");
+}
+
+if ($page == "highscores") {
+    $template->set('main', "highscores.php");
 }

@@ -22,8 +22,16 @@ class Database {
             Database::initialize();
         }
 
-        $columns    = self::build_sql_from_array(array_keys($fields));
-        $values     = self::build_sql_from_array(array_values($fields));
+        $columns = "";
+        $values = "";
+        foreach ($fields as $key => $value) {
+            $value = self::$db->escape(gettype($value), $value);
+            $columns .= ", $key";
+            $values  .= ", $value";
+        }
+        
+        $columns = substr($columns, 2);
+        $values = substr($values, 2);
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
         self::$db->execute($query);
     }
