@@ -1,5 +1,6 @@
 <?php
 class Player {
+    protected $id;
     protected $name;
     protected $score;
     protected $email;
@@ -7,10 +8,11 @@ class Player {
 
     public function __construct() {
         $row = Database::retrieve_row('users', array('email' => fAuthorization::getUserToken()));
-        $this->name = $row['username'];
-        $this->score = $row['score'];
-        $this->email = $row['email'];
-        $this->depth = $row['depth'];
+        $this->name     = $row['username'];
+        $this->id       = $row['id'];
+        $this->score    = $row['score'];
+        $this->email    = $row['email'];
+        $this->depth    = $row['depth'];
     }
 
     public function __get($property) {
