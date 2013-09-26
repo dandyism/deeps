@@ -1,6 +1,12 @@
 <?php
 $player = new Player();
 $encounter = new Encounter($player->depth);
+
+// Game Actions
+$action = fRequest::get('action', 'string');
+if ($action == "delve") {
+    $player->delve();
+}
 ?>
 
 <div class="row">
@@ -10,6 +16,10 @@ $encounter = new Encounter($player->depth);
 
 <?php
 echo '<p>' . $encounter->text . '</p>';
+?>
+<a href="/?action=delve" class="btn btn-primary btn-lg">Delve</a>
+<a href="/?action=retreat" class="btn btn-default btn-lg">Retreat</a>
+<?php
 $player->score += $encounter->score;
 $player->save();
 ?>

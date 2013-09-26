@@ -49,7 +49,8 @@ class Player {
         Database::update('users', array('email' => fAuthorization::getUserToken()),
             array(
                 'score' => $this->score,
-                'strength' => $this->strength
+                'strength' => $this->strength,
+                'depth' => $this->depth
             )
         );
     }

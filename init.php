@@ -31,14 +31,15 @@ $template->set('header', "header.php");
 $template->set('footer', "footer.php");
 $template->set('main', "default.php");
 
-// Actions
-if (fRequest::get('action', 'string') == "register") {
+// User Actions
+$action = fRequest::get('action', 'string');
+if ($action == "register") {
     Users::register();
 }
-else if (fRequest::get('action', 'string') == "login") {
+else if ($action == "login") {
     Users::login();
 }
-else if (fRequest::get('action', 'string') == "logout") {
+else if ($action == "logout") {
     fAuthorization::destroyUserInfo();
 }
 
