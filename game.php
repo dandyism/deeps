@@ -16,13 +16,16 @@ if ($action == "retreat") {
 <?php
 }
 else {
-    $player->setDepth(1);
+    $depth = intval($player->getDepth());
+    $depth++;
+    $player->setDepth($depth);
 
     $encounters = fRecordSet::build(
         'Encounter',
-        array('mindepth>=' => $player->getDepth(), 'maxdepth<=|maxdepth=' => array($player->getDepth(), null)),
+        array('mindepth<=' => $depth, 'maxdepth>=|maxdepth=' => array($depth, null)),
         array('rand()' => 'asc')
     );
+
 
     $encounter = $encounters->getRecord(0);
 ?>

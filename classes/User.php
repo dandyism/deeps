@@ -24,9 +24,4 @@ class User extends fActiveRecord
         $hash = fCryptography::hashPassword($password);
         fActiveRecord::assign($values, $old_values, 'password', $hash);
     }
-
-    public function delve()
-    {
-        $this->depth++;
-    }
 }
