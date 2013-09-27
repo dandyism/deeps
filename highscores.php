@@ -1,13 +1,14 @@
 <table class="table">
 <thead>
-<tr><td>Score</td><td>Date</td></tr>
+<tr><td>User</td><td>Score</td><td>Date</td></tr>
 </thead>
 <tbody class="table-striped">
 <?php
-$result = Database::retrieve('highscores', array('score > 0'));
+$records = fRecordSet::build('Highscore', array(), array('score' => 'desc'));
 
-foreach ($result as $row) {
-    echo '<tr><td>' . $row['score'] . '</td><td>' . $row['retreat_date'] . '</td></tr>';
+$records->precreateUsers();
+foreach ($records as $record) {
+    echo '<tr><td>' . $record->createUser()->prepareUsername() . '</td><td>' . $record->getScore() . '</td><td>' . $record->getRetreatDate() . '</td></tr>';
 }
 ?>
 <tbody>

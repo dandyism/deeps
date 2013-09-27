@@ -18,6 +18,12 @@ function autoloader($class_name) {
 
 spl_autoload_register('autoloader');
 
+// Database
+fORMDatabase::attach(
+    new fDatabase('mysql', 'deeps', 'deeps', 'deeps')
+);
+
+// Authorization
 fAuthorization::setLoginPage('/?page=login');
 fAuthorization::setAuthLevels(
     array(
@@ -25,6 +31,7 @@ fAuthorization::setAuthLevels(
     )
 );
 
+// Templating
 $template = new fTemplating('/opt/lampp/htdocs/');
 $template->set('game_name', "Deeps");
 $template->set('header', "header.php");
