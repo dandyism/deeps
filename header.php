@@ -5,12 +5,12 @@
 <?php
 if (fAuthorization::checkAuthLevel('player')) {
 ?>
-                <li><a href="/?action=logout">Logout</a></li>
+            <li><a href="/?action=logout">Logout</a></li>
 <?php
 } else {
 ?>
-                <li><a href="/login/" >login</a></li> 
-                <li><a href="/register/" >register</a></li>
+            <li><a href="/login/" >login</a></li> 
+            <li><a href="/register/" >register</a></li>
 <?php
 }
 ?>
@@ -19,9 +19,21 @@ if (fAuthorization::checkAuthLevel('player')) {
 
 <?php
 if (fMessaging::check('error', 'user')) {
-    fMessaging::show('error', 'user', 'alert alert-danger');
-}
-else {
-    fMessaging::show('success', 'user', 'alert alert-success');
-}
+    $err_mess = fMessaging::retrieve('error', 'user', 'alert alert-danger');
 ?>
+    <div class="alert alert-danger alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <?php echo $err_mess; ?>
+    </div>
+<?php
+}
+
+if (fMessaging::check('success', 'user')) {
+    $succ_mess = fMessaging::retrieve('success', 'user', 'alert alert-success');
+?>
+    <div class="alert alert-success alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <?php echo $succ_mess; ?>
+    </div>
+<?php
+}
