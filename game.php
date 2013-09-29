@@ -5,17 +5,16 @@ $encounter = null;
 // Game Actions
 $action = fRequest::get('action', 'string');
 if ($action == "retreat") {
-    if ($player->getScore() > 0) {
-        $highscore = new Highscore();
-        $highscore->setPlayerId($player->getId());
-        $highscore->setScore($player->getScore());
-        $highscore->store();
+    if ($player->getDelveScore() > 0) {
+        $new_score = intval($player->getScore());
+        $new_score += intval($player->getDelveScore());
+        $player->setScore($new_score);
         echo '<p>You take what valuables you have an return to the surface.</p>';
     }
     else {
         echo '<p>You return to the surface empty handed.</p>';
     }
-    $player->setScore(0);
+    $player->setDelveScore(0);
     $player->setDepth(0);
 ?>
 <a href="/highscores/" class="btn btn-default btn-lg">View the High Scores</a>
@@ -43,19 +42,19 @@ if ($encounter != null) {
     $score_inc = ($action == 'delve') ? $encounter->getScore() : 0;
 ?>
 <div class="row">
-    <div class="col-md-6">score: <?php echo $player->getScore() . ' +' . $score_inc; ?></div>
-    <div class="col-md-6">depth: <?php echo $player->getDepth(); ?></div>
+    <div class="col-md-6">Delve Score: <?php echo $player->getDelveScore() . ' +' . $score_inc; ?></div>
+    <div class="col-md-6">Current Depth: <?php echo $player->getDepth(); ?></div>
 </div>
 
 <?php
 echo '<p>' . $encounter->getText() . '</p>';
 
     if ($action == "delve" && !$encounter->getDeath()) {
-        $player->setScore($player->getScore() + $encounter->getScore());
+        $player->setDelveScore($player->getDelveScore() + $encounter->getScore());
     }
 
     if ($encounter->getDeath()) {
-        $player->setScore(0);
+        $player->setDelveScore(0);
         $player->setDepth(0);
 ?>
 <a href="/?action=delve" class="btn btn-danger btn-lg">Start a New Game</a>

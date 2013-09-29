@@ -1,13 +1,13 @@
 <table class="table">
 <thead>
-<tr><td>User</td><td>Score</td><td>Date</td></tr>
+<tr><td>Rank</td><td>User</td><td>Score</td></tr>
 </thead>
 <tbody class="table-striped">
 <?php
 $limit = 10;
 $page = fRequest::get('p', 'integer', 1);
 
-$records = fRecordSet::build('Highscore', array(), array('score' => 'desc'), $limit, $page);
+$records = fRecordSet::build('User', array(), array('score' => 'desc'), $limit, $page);
 
 $pages = $records->getPages();
 
@@ -39,9 +39,10 @@ if ($pages > 1) {
 </ul>
 <?php
 }
-$records->precreateUsers();
+
+$rank = (($page-1) * $limit) + 1;
 foreach ($records as $record) {
-    echo '<tr><td>' . $record->createUser()->prepareUsername() . '</td><td>' . $record->getScore() . '</td><td>' . $record->getRetreatDate() . '</td></tr>';
+    echo '<tr><td>' . $rank . '</td><td>' . $record->prepareUsername() . '</td><td>' . $record->getScore() . '</td></tr>';
 }
 ?>
 <tbody>
