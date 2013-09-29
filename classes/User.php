@@ -21,7 +21,9 @@ class User extends fActiveRecord
     static public function hashPassword($object, &$values, &$old_values, &$related_records, &$cache)
     {
         $password = $values['password'];
-        $hash = fCryptography::hashPassword($password);
-        fActiveRecord::assign($values, $old_values, 'password', $hash);
+        if (strpos($password, "fCryptography::password_hash") === false) {
+            $hash = fCryptography::hashPassword($password);
+            fActiveRecord::assign($values, $old_values, 'password', $hash);
+        }
     }
 }
