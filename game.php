@@ -5,14 +5,19 @@ $encounter = null;
 // Game Actions
 $action = fRequest::get('action', 'string');
 if ($action == "retreat") {
-    $highscore = new Highscore();
-    $highscore->setPlayerId($player->getId());
-    $highscore->setScore($player->getScore());
-    $highscore->store();
+    if ($player->getScore() > 0) {
+        $highscore = new Highscore();
+        $highscore->setPlayerId($player->getId());
+        $highscore->setScore($player->getScore());
+        $highscore->store();
+        echo '<p>You take what valuables you have an return to the surface.</p>';
+    }
+    else {
+        echo '<p>You return to the surface empty handed.</p>';
+    }
     $player->setScore(0);
     $player->setDepth(0);
 ?>
-<p>You take what valuables you have an return to the surface.</p>
 <a href="/highscores/" class="btn btn-default btn-lg">View the High Scores</a>
 <?php
 }
