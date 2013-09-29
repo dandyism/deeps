@@ -1,3 +1,4 @@
+<?php $player = $this->get('user'); ?>
 <div class="container">
     <h1><?php echo $this->get('game_name'); ?></h1>
     <nav role="navigation" class="navbar navbar-default">
@@ -6,15 +7,17 @@
 if (fAuthorization::checkAuthLevel('player')) {
 ?>
             <li><a href="/?action=logout">Logout</a></li>
+        </ul>
 <?php
+        echo '<div class="pull-right navbar-text">' . $player->prepareUsername() . ' <span class="well well-sm">' . $player->getScore() . '</span></div>';
 } else {
 ?>
             <li><a href="/login/" >login</a></li> 
             <li><a href="/register/" >register</a></li>
+        </ul>
 <?php
 }
 ?>
-        </ul>
     </nav>
 
 <?php

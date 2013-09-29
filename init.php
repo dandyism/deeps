@@ -65,3 +65,9 @@ else if ($page == "login") {
 if ($page == "highscores") {
     $template->set('main', "highscores.php");
 }
+
+// Load user information
+if (fAuthorization::checkAuthLevel('player')) {
+    $user = new User(array('email' => fAuthorization::getUserToken()));
+    $template->set('user', $user);
+}

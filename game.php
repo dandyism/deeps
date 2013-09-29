@@ -1,5 +1,5 @@
 <?php
-$player = new User(array('email' => fAuthorization::getUserToken()));
+$player = $this->get('user');
 $encounter = null;
 
 // Game Actions
