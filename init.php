@@ -18,6 +18,8 @@ function autoloader($class_name) {
 
 spl_autoload_register('autoloader');
 
+fTimestamp::setDefaultTimezone('America/New_York');
+
 // Database
 fORMDatabase::attach(
     new fDatabase('mysql', 'deeps', 'deeps', 'deeps')
@@ -37,6 +39,7 @@ $template->set('game_name', "Deeps");
 $template->set('header', "header.php");
 $template->set('footer', "footer.php");
 $template->set('main', "default.php");
+$template->set('hourly_turns', 5);
 
 // User Actions
 $action = fRequest::get('action', 'string');
@@ -70,4 +73,27 @@ if ($page == "highscores") {
 if (fAuthorization::checkAuthLevel('player')) {
     $user = new User(array('email' => fAuthorization::getUserToken()));
     $template->set('user', $user);
+}
+
+// Save last page load
+$user = $template->get('user');
+if ($user !== null) {
+    $last = intval($user->getLastTurnPayout()->format('U'));
+    $now = intval(date('U'));
+    $delta = $now - $last;
+
+    $turns = intval($user->getTurns());
+
+    while ($delta >= 3600) {
+        $turns += $template->get('hourly_turns');
+        $delta -= 3600;
+    }
+
+    $turn_delta = $turns - intval($user->getTurns());
+    $user->setTurns($turns);
+    $timestamp = new fTimestamp('now');
+    $timestamp = $timestamp->adjust("-$delta seconds");
+    $user->setLastTurnPayout($timestamp->format('Y-m-d H:00:00'));
+
+    if($turn_delta > 0) fMessaging::create('success', 'user', "You have received " . fGrammar::inflectOnQuantity($turn_delta, '1 turn.', '%d turns.'));
 }
