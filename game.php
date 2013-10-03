@@ -20,7 +20,8 @@ if ($action == "retreat") {
 <a href="/highscores/" class="btn btn-default btn-lg">View the High Scores</a>
 <?php
 }
-else if ($action == "delve") {
+else if ($action == "delve" && $player->getTurns() > 0) {
+    $player->setTurns(intval($player->getTurns)-1);
     $depth = intval($player->getDepth());
     $depth++;
     $player->setDepth($depth);
@@ -49,7 +50,7 @@ if ($encounter != null) {
 <?php
 echo '<p>' . $encounter->getText() . '</p>';
 
-    if ($action == "delve" && !$encounter->getDeath()) {
+    if ($action == "delve" && !$encounter->getDeath() && $player->getTurns() > 0) {
         $player->setDelveScore($player->getDelveScore() + $encounter->getScore());
     }
 
@@ -62,7 +63,7 @@ echo '<p>' . $encounter->getText() . '</p>';
     }
     else {
 ?>
-<a href="/?action=delve" class="btn btn-primary btn-lg">Delve</a>
+    <a href="/?action=delve" class="btn btn-primary btn-lg" <?php if($player->getTurns() <= 0) echo "disabled"; ?>>Delve</a>
 <a href="/?action=retreat" class="btn btn-default btn-lg">Retreat</a>
 <?php
     }
