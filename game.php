@@ -21,7 +21,7 @@ if ($action == "retreat") {
 <?php
 }
 else if ($action == "delve" && $player->getTurns() > 0) {
-    $player->setTurns(intval($player->getTurns)-1);
+    $player->setTurns(intval($player->getTurns())-1);
     $depth = intval($player->getDepth());
     $depth++;
     $player->setDepth($depth);
@@ -58,7 +58,7 @@ echo '<p>' . $encounter->getText() . '</p>';
         $player->setDelveScore(0);
         $player->setDepth(0);
 ?>
-<a href="/?action=delve" class="btn btn-danger btn-lg">Start a New Game</a>
+<a href="/?action=delve" class="btn btn-danger btn-lg" <?php if($player->getTurns() <= 0) echo "disabled"; ?>>Start a New Game</a>
 <?php
     }
     else {
